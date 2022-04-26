@@ -2,4 +2,5 @@
     <string name="app_name">Todolist</string>
     <string name="delete_button_text">Delete</string>
     <string name="add_button_text">Add</string>
+    <string name="todo_list_item_empty_text">Nothing here</string>
 </resources>
