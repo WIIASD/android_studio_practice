@@ -15,11 +15,6 @@ public class TDI_RecyclerViewAdapter extends RecyclerView.Adapter<TDI_RecyclerVi
 
     private ArrayList<TodoItem> todoItems;
 
-    public void addTodoItem(TodoItem todoItem){
-        todoItems.add(todoItem);
-        notifyItemInserted(todoItems.size() - 1);
-    }
-
     public TDI_RecyclerViewAdapter(ArrayList<TodoItem> todoItems){
         this.todoItems = todoItems;
     }
@@ -37,16 +32,20 @@ public class TDI_RecyclerViewAdapter extends RecyclerView.Adapter<TDI_RecyclerVi
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         TodoItem i = todoItems.get(position);
         holder.tvTodoItemString.setText(i.getTodoItemString());
-        holder.getCbTodoItemChecked().setChecked(i.isChecked());
-        holder.getCbTodoItemChecked().setOnCheckedChangeListener((view, ischecked) -> {
+        holder.cbTodoItemChecked.setChecked(i.isChecked());
+        holder.cbTodoItemChecked.setOnCheckedChangeListener((view, ischecked) -> {
             i.setChecked(ischecked);
-            System.out.println("ischeck = " + ischecked);
         });
     }
 
     @Override
     public int getItemCount() {
         return todoItems.size();
+    }
+
+    public void addTodoItem(TodoItem todoItem){
+        todoItems.add(todoItem);
+        notifyItemInserted(todoItems.size() - 1);
     }
 
     public void deleteCheckedItems() {
@@ -66,15 +65,6 @@ public class TDI_RecyclerViewAdapter extends RecyclerView.Adapter<TDI_RecyclerVi
             super(itemView);
             tvTodoItemString = itemView.findViewById(R.id.todo_item_string);
             cbTodoItemChecked = itemView.findViewById(R.id.todo_item_checked);
-        }
-
-
-        public TextView getTvTodoItemString() {
-            return tvTodoItemString;
-        }
-
-        public CheckBox getCbTodoItemChecked() {
-            return cbTodoItemChecked;
         }
     }
 }
