@@ -23,7 +23,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="@string/todo_list_item_empty_text"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toStartOf="@+id/todo_item_checked"
                 app:layout_constraintStart_toStartOf="parent"
