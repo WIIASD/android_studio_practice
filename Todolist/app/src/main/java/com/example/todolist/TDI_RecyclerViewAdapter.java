@@ -10,13 +10,19 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.Gson;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class TDI_RecyclerViewAdapter extends RecyclerView.Adapter<TDI_RecyclerViewAdapter.ViewHolder>{
@@ -36,6 +42,10 @@ public class TDI_RecyclerViewAdapter extends RecyclerView.Adapter<TDI_RecyclerVi
         return new ViewHolder(view);
     }
 
+    public ArrayList<TodoItem> getTodoItems() {
+        return todoItems;
+    }
+
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         TodoItem i = todoItems.get(position);
@@ -48,21 +58,25 @@ public class TDI_RecyclerViewAdapter extends RecyclerView.Adapter<TDI_RecyclerVi
             View popUpView = LayoutInflater.from(view.getContext()).inflate(R.layout.todo_item_description_page, null);
             int w = ViewGroup.LayoutParams.MATCH_PARENT;
             int h = ViewGroup.LayoutParams.MATCH_PARENT;
-            boolean focusable = true;
-            final PopupWindow popupWindow = new PopupWindow(popUpView, w, h, focusable);
-
+            final PopupWindow popupWindow = new PopupWindow(popUpView, w, h, true);
+            popupWindow.setOutsideTouchable(false);
             View popUpWindowView = popupWindow.getContentView();
             TextInputLayout titleLayout = popUpWindowView.findViewById(R.id.Popup_tilTodoTitleLayout);
             TextInputEditText title = titleLayout.findViewById(R.id.Popup_tietTitleInput);
+            TextInputEditText description = popUpWindowView.findViewById((R.id.Popup_tietDescriptionInput));
             title.setText(i.getTodoItemTitle());
+            description.setText(i.getTodoItemDescription());
             popUpWindowView.findViewById(R.id.Popup_btnDone).setOnClickListener(view1 -> {
                 String title_string = title.getText().toString();
+                String description_string = description.getText().toString();
                 if(title_string.equals("")){
                     titleLayout.setErrorEnabled(true);
                     titleLayout.setError("Please Enter Something");
                     return;
                 }
-                todoItems.get(position).setTodoItemTitle(title_string);
+                i.setTodoItemTitle(title_string);
+                i.setTodoItemDescription(description_string);
+                notifyItemChanged(todoItems.indexOf(i));//have to do a search in case position is updated
                 popupWindow.dismiss();
             });
             title.addTextChangedListener(new TextWatcher() {
@@ -78,10 +92,6 @@ public class TDI_RecyclerViewAdapter extends RecyclerView.Adapter<TDI_RecyclerVi
                     }
                 }
             });
-            popupWindow.setOnDismissListener(() -> {
-                notifyItemChanged(position);
-            });
-
             popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
         });
     }
