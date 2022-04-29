@@ -1,23 +1,21 @@
 package com.example.todolist;
 
-import java.util.Objects;
-
 public class TodoItem {
-    private String todoItemString;
+    private String todoItemTitle;
     private boolean checked;
 
-    public TodoItem(String todoItemString) {
-        this.todoItemString = todoItemString;
+    public TodoItem(String todoItemTitle) {
+        this.todoItemTitle = todoItemTitle;
         checked = false;
     }
 
-    public TodoItem(String todoItemString, boolean checked) {
-        this.todoItemString = todoItemString;
+    public TodoItem(String todoItemTitle, boolean checked) {
+        this.todoItemTitle = todoItemTitle;
         this.checked = checked;
     }
 
-    public String getTodoItemString() {
-        return todoItemString;
+    public String getTodoItemTitle() {
+        return todoItemTitle;
     }
 
     public boolean isChecked() {
@@ -26,5 +24,9 @@ public class TodoItem {
 
     public void setChecked(boolean checked) {
         this.checked = checked;
+    }
+
+    public void setTodoItemTitle(String todoItemTitle) {
+        this.todoItemTitle = todoItemTitle;
     }
 }
