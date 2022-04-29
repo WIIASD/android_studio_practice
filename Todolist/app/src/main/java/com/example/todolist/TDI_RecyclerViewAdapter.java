@@ -58,6 +58,7 @@ public class TDI_RecyclerViewAdapter extends RecyclerView.Adapter<TDI_RecyclerVi
             View popUpView = LayoutInflater.from(view.getContext()).inflate(R.layout.todo_item_description_page, null);
             int w = ViewGroup.LayoutParams.MATCH_PARENT;
             int h = ViewGroup.LayoutParams.MATCH_PARENT;
+            // TODO: 4/29/2022 put popupwindow stuff in a class 
             final PopupWindow popupWindow = new PopupWindow(popUpView, w, h, true);
             popupWindow.setOutsideTouchable(false);
             View popUpWindowView = popupWindow.getContentView();

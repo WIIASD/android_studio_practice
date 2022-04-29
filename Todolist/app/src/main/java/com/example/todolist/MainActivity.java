@@ -26,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayList<TodoItem> todoItems;
     Button addButton, deleteButton;
-    RecyclerView recyclerView;
     TextInputLayout todoListItemTextBoxLayout;
     TextInputEditText todoListItemTextBox;
 
@@ -41,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
         deleteButton = findViewById(R.id.btnDeleteButton);
         todoListItemTextBox = findViewById(R.id.tietTodoItemEditText);
         todoListItemTextBoxLayout = findViewById(R.id.tilTodoItemEditTextLayout);
-        recyclerView = findViewById(R.id.rvTodoList);
 
         fillTodoItems();
 
@@ -51,68 +49,6 @@ public class MainActivity extends AppCompatActivity {
         initAddButton();
         initDeleteButton();
         initTodoListItemTextBox();
-        // TODO: 4/29/2022 clean up this chunk of garbage 
-        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onItemRangeInserted(int positionStart, int itemCount) {
-                super.onItemRangeInserted(positionStart, itemCount);
-                try {
-                    FileWriter.writeToJson(recyclerView.getContext(), adapter.getTodoItems(), "list_data.json");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onChanged() {
-                super.onChanged();
-                try {
-                    FileWriter.writeToJson(recyclerView.getContext(), adapter.getTodoItems(), "list_data.json");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onItemRangeChanged(int positionStart, int itemCount) {
-                super.onItemRangeChanged(positionStart, itemCount);
-                try {
-                    FileWriter.writeToJson(recyclerView.getContext(), adapter.getTodoItems(), "list_data.json");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onItemRangeChanged(int positionStart, int itemCount, @Nullable Object payload) {
-                super.onItemRangeChanged(positionStart, itemCount, payload);
-                try {
-                    FileWriter.writeToJson(recyclerView.getContext(), adapter.getTodoItems(), "list_data.json");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onItemRangeRemoved(int positionStart, int itemCount) {
-                super.onItemRangeRemoved(positionStart, itemCount);
-                try {
-                    FileWriter.writeToJson(recyclerView.getContext(), adapter.getTodoItems(), "list_data.json");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onItemRangeMoved(int fromPosition, int toPosition, int itemCount) {
-                super.onItemRangeMoved(fromPosition, toPosition, itemCount);
-                try {
-                    FileWriter.writeToJson(recyclerView.getContext(), adapter.getTodoItems(), "list_data.json");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
 
         setupAdapter();
     }
@@ -173,5 +109,50 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.rvTodoList);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(layoutManager);
+        // TODO: 4/29/2022 clean up this chunk of garbage
+        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                onChanged();
+            }
+
+            @Override
+            public void onChanged() {
+                super.onChanged();
+                update();
+            }
+
+            @Override
+            public void onItemRangeChanged(int positionStart, int itemCount) {
+                super.onItemRangeChanged(positionStart, itemCount);
+                update();
+            }
+
+            @Override
+            public void onItemRangeChanged(int positionStart, int itemCount, @Nullable Object payload) {
+                super.onItemRangeChanged(positionStart, itemCount, payload);
+                update();
+            }
+
+            @Override
+            public void onItemRangeRemoved(int positionStart, int itemCount) {
+                super.onItemRangeRemoved(positionStart, itemCount);
+                update();
+            }
+
+            @Override
+            public void onItemRangeMoved(int fromPosition, int toPosition, int itemCount) {
+                super.onItemRangeMoved(fromPosition, toPosition, itemCount);
+                update();
+            }
+
+            private void update(){
+                try {
+                    FileWriter.writeToJson(recyclerView.getContext(), adapter.getTodoItems(), "list_data.json");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }
